@@ -5,6 +5,8 @@ html,body{
     align-items:center;
 }
 
-table,td,tr{
+td{
     border: 1px solid;
+    border-collapse: collapse;
+    padding: 8px;
 }
