@@ -9,7 +9,7 @@ html, body {
 }
 
 table, td, tr {
-    border: 1px solid;
+    border: 1px solid #244242;
     border-collapse: collapse;
 }
 
