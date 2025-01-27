@@ -158,30 +158,32 @@ function getRandomColor() {
 // }
 
 function spreadColor(cell, color) {
-    const queue = [cell];
-    const visited = new Set();
+    const queue = [cell]; // Initialize a queue with the starting cell
+    const visited = new Set(); // Keep track of processed cells to avoid duplicates
 
     function processQueue() {
-        if (queue.length === 0) return;
+        if (queue.length === 0) return; // Stop when the queue is empty
 
-        const currentCell = queue.shift();
+        const currentCell = queue.shift(); // Dequeue the next cell to process
         if (currentCell && !visited.has(currentCell)) {
-            currentCell.style.backgroundColor = color;
-            visited.add(currentCell);
+            currentCell.style.backgroundColor = color; // Apply the color to the cell
+            visited.add(currentCell); // Mark the cell as visited
 
-            const adjacentCells = getAdjacentCells(currentCell);
+            const adjacentCells = getAdjacentCells(currentCell); // Get neighboring cells
             adjacentCells.forEach(adjacentCell => {
+                // Add unvisited and differently colored cells to the queue
                 if (!visited.has(adjacentCell) && adjacentCell.style.backgroundColor !== color) {
                     queue.push(adjacentCell);
                 }
             });
         }
 
-        setTimeout(processQueue, 50); 
+        setTimeout(processQueue, 50); // Process the next "wave" of cells after a delay
     }
 
-    processQueue();
+    processQueue(); // Start the spreading process
 }
+
 
 
 document.addEventListener('DOMContentLoaded', (event) => {
