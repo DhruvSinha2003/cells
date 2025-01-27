@@ -145,17 +145,44 @@ function getRandomColor() {
     return getHexFromSplash(splash);
 }
 
+// function spreadColor(cell, color) {
+//     cell.style.backgroundColor = color;
+//     const adjacentCells = getAdjacentCells(cell);
+//     setTimeout(() => {
+//         adjacentCells.forEach(adjacentCell => {
+//             if (adjacentCell.style.backgroundColor !== color) {
+//                 spreadColor(adjacentCell, color);
+//             }
+//         });
+//     }, 300); 
+// }
+
 function spreadColor(cell, color) {
-    cell.style.backgroundColor = color;
-    const adjacentCells = getAdjacentCells(cell);
-    setTimeout(() => {
-        adjacentCells.forEach(adjacentCell => {
-            if (adjacentCell.style.backgroundColor !== color) {
-                spreadColor(adjacentCell, color);
-            }
-        });
-    }, 300); 
+    const queue = [cell];
+    const visited = new Set();
+
+    function processQueue() {
+        if (queue.length === 0) return;
+
+        const currentCell = queue.shift();
+        if (currentCell && !visited.has(currentCell)) {
+            currentCell.style.backgroundColor = color;
+            visited.add(currentCell);
+
+            const adjacentCells = getAdjacentCells(currentCell);
+            adjacentCells.forEach(adjacentCell => {
+                if (!visited.has(adjacentCell) && adjacentCell.style.backgroundColor !== color) {
+                    queue.push(adjacentCell);
+                }
+            });
+        }
+
+        setTimeout(processQueue, 50); 
+    }
+
+    processQueue();
 }
+
 
 document.addEventListener('DOMContentLoaded', (event) => {
     const cells = document.querySelectorAll('td');
