@@ -1,12 +1,18 @@
-html,body{
+html, body {
     height: 100%;
-    display:flex;
+    display: flex;
     justify-content: center;
-    align-items:center;
+    align-items: center;
+    background-color: #09122C;
+    margin: 0;
+    flex-direction: column;
 }
 
-td{
+table, td, tr {
     border: 1px solid;
     border-collapse: collapse;
+}
+
+td {
     padding: 6px;
 }

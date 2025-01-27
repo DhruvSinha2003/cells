@@ -67,6 +67,45 @@ function getRandomColor() {
     return getHexFromSplash(splash);
 }
 
+function createTable(size) {
+    const table = document.getElementById('grid');
+    table.innerHTML = ''; 
+
+    for (let i = 0; i < size; i++) {
+        const row = document.createElement('tr');
+        for (let j = 0; j < size; j++) {
+            const cell = document.createElement('td');
+            row.appendChild(cell);
+        }
+        table.appendChild(row);
+    }
+    const cells = document.querySelectorAll('td');
+
+    if (size === 100) {
+        cells.forEach(cell => {
+            cell.style.padding = '3.8px';
+        });
+    } else if (size === 10) {
+        cells.forEach(cell => {
+            cell.style.padding = '16px';
+        });
+            }
+    
+    else {
+        cells.forEach(cell => {
+            cell.style.padding = '8px';
+        });
+    }
+    
+    cells.forEach(cell => {
+        cell.addEventListener('click', () => {
+            spreadColor(cell, getRandomColor());
+        });
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => createTable(10));
+
 document.addEventListener('DOMContentLoaded', (event) => {
     const cells = document.querySelectorAll('td');
     cells.forEach(cell => {
