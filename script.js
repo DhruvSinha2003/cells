@@ -3,10 +3,10 @@ let mode = 'spread';
 function setMode(newMode) {
     mode = newMode;
     console.log('Mode set to:', mode);
-        const cells = document.querySelectorAll('td');
-        cells.forEach(cell => {
-            cell.style.backgroundColor = '';
-        });
+    const cells = document.querySelectorAll('td');
+    cells.forEach(cell => {
+        cell.style.backgroundColor = '';
+    });
 }
 
 function getAdjacentCells(cell) {
@@ -72,30 +72,77 @@ function spreadColor(cell, color) {
 }
 
 function fallColor(cell, color) {
-    let currentCell = cell;
+    const table = cell.parentElement.parentElement;
+    const tableSize = table.rows.length;
+    let colorSize, timeout;
     
-    function processFall() {
-        const row = currentCell.parentElement;
-        const table = row.parentElement;
-        const cellIndex = Array.from(row.children).indexOf(currentCell);
-        const nextRow = row.nextElementSibling;
-
-        // If there's a next row and its cell is empty
-        if (nextRow) {
-            const nextCell = nextRow.children[cellIndex];
-            if (!nextCell.style.backgroundColor) {
-                // Move the color down
-                nextCell.style.backgroundColor = color;
-                currentCell.style.backgroundColor = '';
-                currentCell = nextCell;
-                setTimeout(processFall, 100);
-            }
+    // Determine pattern size and timeout based on table dimensions
+    if (tableSize === 50) {
+        colorSize = 3;
+        timeout = 100;
+    } else if (tableSize === 100) {
+        colorSize = 5;
+        timeout = 50;
+    } else {
+        colorSize = 1;
+        timeout = 100;
+    }
+    
+    // Get clicked cell position
+    const rowIndex = cell.parentElement.rowIndex;
+    const cellIndex = cell.cellIndex;
+    
+    // Calculate pattern boundaries
+    const startRow = Math.max(0, rowIndex - Math.floor(colorSize/2));
+    const endRow = Math.min(tableSize - 1, rowIndex + Math.floor(colorSize/2));
+    const startCell = Math.max(0, cellIndex - Math.floor(colorSize/2));
+    const endCell = Math.min(tableSize - 1, cellIndex + Math.floor(colorSize/2));
+    
+    // Store cells that need to fall
+    let fallingCells = [];
+    
+    // Apply initial color pattern
+    for (let i = startRow; i <= endRow; i++) {
+        for (let j = startCell; j <= endCell; j++) {
+            const currentCell = table.rows[i].cells[j];
+            currentCell.style.backgroundColor = color;
+            fallingCells.push({
+                cell: currentCell,
+                columnIndex: j
+            });
         }
     }
-
-    // Set initial color
-    currentCell.style.backgroundColor = color;
-    setTimeout(processFall, 100);
+    
+    function processFall() {
+        let stillFalling = false;
+        
+        fallingCells.forEach(({cell, columnIndex}) => {
+            const currentRow = cell.parentElement;
+            const nextRow = currentRow.nextElementSibling;
+            
+            if (nextRow) {
+                const nextCell = nextRow.cells[columnIndex];
+                if (!nextCell.style.backgroundColor) {
+                    // Move the color down
+                    nextCell.style.backgroundColor = color;
+                    cell.style.backgroundColor = '';
+                    // Update the falling cells array
+                    const index = fallingCells.findIndex(item => item.cell === cell);
+                    fallingCells[index] = {
+                        cell: nextCell,
+                        columnIndex: columnIndex
+                    };
+                    stillFalling = true;
+                }
+            }
+        });
+        
+        if (stillFalling) {
+            setTimeout(processFall, timeout);
+        }
+    }
+    
+    setTimeout(processFall, timeout);
 }
 
 function createTable(size) {
@@ -113,7 +160,6 @@ function createTable(size) {
 
     const cells = document.querySelectorAll('td');
     
-    // Set cell padding based on grid size
     if (size === 100) {
         cells.forEach(cell => cell.style.padding = '3.8px');
     } else if (size === 10) {
@@ -122,7 +168,6 @@ function createTable(size) {
         cells.forEach(cell => cell.style.padding = '8px');
     }
     
-    // Add click event listeners
     cells.forEach(cell => {
         cell.addEventListener('click', () => {
             const color = getRandomColor();
@@ -135,5 +180,4 @@ function createTable(size) {
     });
 }
 
-// Initialize the table when the page loads
 document.addEventListener('DOMContentLoaded', () => createTable(10));
