@@ -3,16 +3,42 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #09122C;
+    background-color: #0A192F; /* Slightly darker background for better contrast */
     margin: 0;
     flex-direction: column;
+    font-family: 'Arial', sans-serif; /* Add a clean font */
+    color: #E0E0E0; /* Light text color for readability */
 }
 
-table, td, tr {
-    border: 1px solid #244242;
+table {
+    border: 1px solid #3A506B;
     border-collapse: collapse;
+    width: 80%; /* Make the table responsive */
+    max-width: 600px; /* Limit the table width */
+    background-color: #112240; /* Subtle background for the table */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow for depth */
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden; /* Ensure rounded corners apply */
 }
 
-td {
-    padding: 6px;
+td, th {
+    border: 1px solid #3A506B;
+    padding: 10px; /* Increase padding for better spacing */
+    text-align: center; /* Center-align text */
+    color: #E0E0E0; /* Light text color */
+}
+
+tr:nth-child(even) {
+    background-color: #1C3A5A; /* Alternate row color for better readability */
+}
+
+tr:hover {
+    background-color: #2B4C70; /* Highlight row on hover */
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+th {
+    background-color: #244466; /* Distinct header background */
+    font-weight: bold; /* Bold header text */
+    text-transform: uppercase; /* Uppercase header text */
 }
